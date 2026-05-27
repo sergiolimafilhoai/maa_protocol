@@ -121,7 +121,7 @@ class MoralValidationResult(BaseModel):
 
     # Metadata
     corpus_version: str = "1857.eternal"  # Q.615
-    engine_version: str = "0.10.3"
+    engine_version: str = "0.10.4"
 
 
 # ── Audit trail ─────────────────────────────────────────────────────────────
@@ -159,6 +159,25 @@ class CorpusChangelogEntry(BaseModel):
 
 
 CORPUS_CHANGELOG: list[CorpusChangelogEntry] = [
+    CorpusChangelogEntry(
+        version="0.10.4",
+        date="2026-05-26",
+        change_description=(
+            "README vocabulary correction: 'Divine or Natural Law' "
+            "→ 'Natural Law' in the 10 Moral Laws table. Consistent "
+            "with the architectural decision (v0.5.0) to use 'lei "
+            "natural' throughout the corpus instead of 'lei de Deus'. "
+            "MAA makes no theological claim."
+        ),
+        corpus_reference="Q.614",
+        corpus_justification=(
+            "Q.614 establishes that natural law is the only true law. "
+            "The corpus normalized all references from 'Lei de Deus' "
+            "to 'lei natural' in v0.5.0. The README should be "
+            "consistent with that decision."
+        ),
+        breaking_change=False,
+    ),
     CorpusChangelogEntry(
         version="0.10.3",
         date="2026-05-26",

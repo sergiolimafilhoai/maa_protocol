@@ -57,7 +57,7 @@ The corpus functions as a **moral reference ontology** — the same role a Const
 
 | # | Law | Questions | Primary Application |
 |---|-----|-----------|---------------------|
-| 1 | Divine or Natural Law | Q.614–648 | Axiom zero — foundation of all |
+| 1 | Natural Law | Q.614–648 | Axiom zero — foundation of all |
 | 2 | Law of Worship | Q.649–673 | Systemic purpose and intention |
 | 3 | Law of Work | Q.674–685 | Contribution recognition |
 | 4 | Law of Reproduction | Q.686–702 | Knowledge transmission |
