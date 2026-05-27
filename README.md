@@ -10,11 +10,10 @@
 
 | Term | Full Name | Meaning |
 |------|-----------|---------|
-| **MAA** | Moral Architecture for AI | The architecture — what structures the system |
-| **AMI** | Artificial Moral Intelligence | The agent — what the system *is* when MAA is implemented |
+| **MAA** | Moral Architecture for AI | The architecture and the system |
 | **Protocol 1019** | Protocol 1019 | Named after the 1,019 questions and answers of *The Spirits' Book* |
 
-MAA is the standard. AMI is what emerges when the standard is applied.
+MAA and AMI refer to the same system — MAA is the English name used throughout this project.
 
 ---
 
@@ -500,7 +499,7 @@ MAA (standard)
 ├── Open Core  — basic validation (open source)
 ├── SaaS       — per-validation (paid API)
 ├── Enterprise — on-premise + support
-└── Certification — "MAA-certified AI System" / "AMI-powered"
+└── Certification — "MAA-certified AI System"
 ```
 
 ---
