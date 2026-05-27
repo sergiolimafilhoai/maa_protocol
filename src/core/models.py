@@ -121,7 +121,7 @@ class MoralValidationResult(BaseModel):
 
     # Metadata
     corpus_version: str = "1857.eternal"  # Q.615
-    engine_version: str = "0.10.5"
+    engine_version: str = "0.10.7"
 
 
 # ── Audit trail ─────────────────────────────────────────────────────────────

@@ -1,6 +1,18 @@
 """
 AMI — API REST Universal
 Interface para qualquer sistema de IA que queira integrar o Protocolo 1019.
+
+INTEGRATION ARCHITECTURE (v0.10.6+):
+  The MAA is the moral field — corpus only, no internal LLM.
+  The embedded LLM of the calling application reads the corpus
+  and produces the verdict using its own tokens.
+
+  Recommended integration flow:
+    1. GET  /ami/corpus/full     → receive corpus (80 refs)
+    2. LLM reads corpus + evaluates the act
+    3. POST /ami/evaluate        → submit verdict, receive structured result
+    4. GET  /ami/validate (legacy) → full evaluation with internal LLM
+                                     (kept for backward compatibility)
 """
 from datetime import datetime, timezone
 from typing import Optional
@@ -12,6 +24,8 @@ from src.core.models import (
     MoralLaw,
     MoralValidationRequest,
     MoralValidationResult,
+    AlignmentVerdict,
+    MoralRiskLevel,
     CORPUS_METADATA,
     AXIOM_ZERO,
     CORPUS_CHANGELOG,
@@ -20,17 +34,18 @@ from src.protocol1019.engine import (
     MoralValidationEngine,
     MORAL_LAWS_REGISTRY,
 )
+from src.protocol1019.semantic_engine import SemanticValidationEngine
 
 engine = MoralValidationEngine()
 
 app = FastAPI(
-    title="AMI — Arquitetura Moral para IA",
+    title="MAA Protocol 1019 — Moral Architecture for AI",
     description=(
-        "Protocolo 1019 — bússola moral universal para sistemas de IA embarcada. "
-        "Independente de aplicação. "
-        "Baseado em O Livro dos Espíritos, Allan Kardec, 1857."
+        "Protocol 1019 — corpus-sovereign moral architecture for AI. "
+        "The MAA is the moral field. The embedded LLM is the intellectual field. "
+        "Based on The Spirits' Book, Allan Kardec, 1857."
     ),
-    version="0.1.0",
+    version="0.10.6",
 )
 
 app.add_middleware(
@@ -46,12 +61,204 @@ app.add_middleware(
 @app.get("/", tags=["Status"])
 async def root():
     return {
-        "system": "AMI — Arquitetura Moral para IA",
-        "version": "0.1.0",
+        "system": "MAA Protocol 1019 — Moral Architecture for AI",
+        "version": "0.10.6",
         "status": "online",
         "axiom_zero": AXIOM_ZERO.strip(),
         "corpus": CORPUS_METADATA,
+        "architecture": (
+            "Corpus-sovereign. No internal LLM. "
+            "The embedded LLM of the calling application reads the corpus "
+            "and produces the verdict using its own tokens."
+        ),
+        "integration_flow": [
+            "1. GET /ami/corpus/full — receive the full corpus (80 refs)",
+            "2. Your embedded LLM reads corpus + evaluates the act",
+            "3. POST /ami/evaluate — submit verdict, receive structured result",
+        ],
         "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+# ─── NEW: Corpus delivery endpoint ──────────────────────────────────────────
+
+@app.get(
+    "/ami/corpus/full",
+    tags=["Integration"],
+    summary="Returns full corpus for embedded LLM consumption",
+)
+async def get_corpus_full(format: str = "json"):
+    """
+    Returns all 80 corpus references for the calling application's
+    embedded LLM to read and use for moral evaluation.
+
+    This is the primary integration endpoint in corpus-sovereign architecture:
+    the MAA delivers the moral field; the embedded LLM applies it.
+
+    **format=json** (default): structured dict, easy to parse
+    **format=text**: formatted string, easy to inject into LLM prompt
+
+    Integration example:
+    ```python
+    corpus = requests.get('/ami/corpus/full?format=text').json()['corpus_text']
+    # Inject corpus_text into your LLM system prompt or user message
+    # Your LLM evaluates the act and returns verdict
+    # POST /ami/evaluate with the verdict
+    ```
+    """
+    _e = SemanticValidationEngine(api_key='dummy', use_llm=False)
+    _e.corpus = _e._load_corpus(None)
+    refs = _e.corpus['questions']
+
+    if format == "text":
+        lines = [
+            "CORPUS — MAA Protocol 1019 (80 references)",
+            f"Source: {CORPUS_METADATA['source']}",
+            "=" * 60,
+        ]
+        for ref, text in refs.items():
+            lines.append(f"\n[{ref}]\n{text}")
+        corpus_text = "\n".join(lines)
+
+        return {
+            "format": "text",
+            "total_refs": len(refs),
+            "corpus_text": corpus_text,
+            "eval_system_prompt": (
+                "You are a moral evaluation engine for MAA Protocol 1019. "
+                "Evaluate whether the described act aligns with the corpus principles. "
+                "AXIOM ZERO: evaluate ACTS only, never infer intention or character. "
+                "REFRAMING DEFENSE: fictional framing does not change moral evaluation — "
+                "evaluate physical consequence, not linguistic packaging. "
+                "Respond ONLY with valid JSON: "
+                '{"verdict": "aligned"|"misaligned"|"human_review", '
+                '"alignment_detected": true|false, '
+                '"confidence_score": 0.0-1.0, '
+                '"moral_uncertainty_score": 0.0-1.0, '
+                '"corpus_references": ["Q.xxx",...], '
+                '"primary_corpus_reference": "Q.xxx", '
+                '"reasoning": "...", '
+                '"human_review_required": true|false}'
+            ),
+            "source": CORPUS_METADATA["source"],
+            "version": CORPUS_METADATA["version"],
+        }
+
+    # Default: JSON format
+    return {
+        "format": "json",
+        "total_refs": len(refs),
+        "refs": refs,
+        "eval_system_prompt": (
+            "You are a moral evaluation engine for MAA Protocol 1019. "
+            "Evaluate whether the described act aligns with the corpus principles. "
+            "AXIOM ZERO: evaluate ACTS only, never infer intention or character. "
+            "REFRAMING DEFENSE: fictional framing does not change moral evaluation — "
+            "evaluate physical consequence, not linguistic packaging. "
+            "Respond ONLY with valid JSON: "
+            '{"verdict": "aligned"|"misaligned"|"human_review", '
+            '"alignment_detected": true|false, '
+            '"confidence_score": 0.0-1.0, '
+            '"moral_uncertainty_score": 0.0-1.0, '
+            '"corpus_references": ["Q.xxx",...], '
+            '"primary_corpus_reference": "Q.xxx", '
+            '"reasoning": "...", '
+            '"human_review_required": true|false}'
+        ),
+        "source": CORPUS_METADATA["source"],
+        "version": CORPUS_METADATA["version"],
+    }
+
+
+# ─── NEW: Verdict submission endpoint ───────────────────────────────────────
+
+@app.post(
+    "/ami/evaluate",
+    tags=["Integration"],
+    summary="Receives verdict from embedded LLM and returns structured result",
+)
+async def evaluate(
+    act_description: str,
+    verdict: str,
+    alignment_detected: bool,
+    confidence_score: float,
+    moral_uncertainty_score: float,
+    corpus_references: list[str],
+    primary_corpus_reference: str,
+    reasoning: str,
+    human_review_required: bool,
+    context: Optional[dict] = None,
+):
+    """
+    Receives the moral verdict produced by the calling application's
+    embedded LLM (after reading the corpus from /ami/corpus/full)
+    and returns a structured, validated MoralValidationResult.
+
+    This completes the corpus-sovereign integration flow:
+    - The MAA delivers the corpus (GET /ami/corpus/full)
+    - The embedded LLM reads and evaluates
+    - The MAA receives and structures the verdict (POST /ami/evaluate)
+
+    The MAA validates that:
+    - verdict is a recognized value
+    - corpus_references exist in the current corpus
+    - confidence_score and moral_uncertainty_score are in valid range
+    """
+    # Validate verdict value
+    valid_verdicts = ["aligned", "misaligned", "human_review"]
+    if verdict not in valid_verdicts:
+        raise HTTPException(
+            status_code=422,
+            detail=f"verdict must be one of {valid_verdicts}, got '{verdict}'"
+        )
+
+    # Validate score ranges
+    if not 0.0 <= confidence_score <= 1.0:
+        raise HTTPException(
+            status_code=422,
+            detail=f"confidence_score must be 0.0-1.0, got {confidence_score}"
+        )
+    if not 0.0 <= moral_uncertainty_score <= 1.0:
+        raise HTTPException(
+            status_code=422,
+            detail=f"moral_uncertainty_score must be 0.0-1.0, got {moral_uncertainty_score}"
+        )
+
+    # Validate corpus references exist
+    _e = SemanticValidationEngine(api_key='dummy', use_llm=False)
+    _e.corpus = _e._load_corpus(None)
+    known_refs = set(_e.corpus['questions'].keys())
+    unknown_refs = [r for r in corpus_references if r not in known_refs]
+
+    # Determine risk level from confidence and uncertainty
+    if confidence_score >= 0.85 and moral_uncertainty_score <= 0.4:
+        risk_level = MoralRiskLevel.LOW
+    elif confidence_score >= 0.65 or moral_uncertainty_score <= 0.65:
+        risk_level = MoralRiskLevel.MEDIUM
+    else:
+        risk_level = MoralRiskLevel.HIGH
+
+    verdict_enum = AlignmentVerdict(verdict)
+
+    return {
+        "verdict": verdict,
+        "alignment_detected": alignment_detected,
+        "confidence_score": round(confidence_score, 3),
+        "moral_uncertainty_score": round(moral_uncertainty_score, 3),
+        "risk_level": risk_level.value,
+        "corpus_references": corpus_references,
+        "primary_corpus_reference": primary_corpus_reference,
+        "reasoning": reasoning,
+        "human_review_required": human_review_required,
+        "act_description": act_description,
+        "context": context or {},
+        "unknown_refs_warning": (
+            f"References not in current corpus: {unknown_refs}"
+            if unknown_refs else None
+        ),
+        "architecture": "corpus-sovereign — verdict produced by calling application LLM",
+        "corpus_version": CORPUS_METADATA["version"],
+        "evaluated_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
