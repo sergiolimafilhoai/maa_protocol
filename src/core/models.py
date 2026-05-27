@@ -121,7 +121,7 @@ class MoralValidationResult(BaseModel):
 
     # Metadata
     corpus_version: str = "1857.eternal"  # Q.615
-    engine_version: str = "0.10.1"
+    engine_version: str = "0.10.3"
 
 
 # ── Audit trail ─────────────────────────────────────────────────────────────
@@ -159,6 +159,91 @@ class CorpusChangelogEntry(BaseModel):
 
 
 CORPUS_CHANGELOG: list[CorpusChangelogEntry] = [
+    CorpusChangelogEntry(
+        version="0.10.3",
+        date="2026-05-26",
+        change_description=(
+            "README.md completeness update. README is the first "
+            "contact point for any reader — corrected to reflect "
+            "the full current state of the project, not just what "
+            "was documented at marco zero. Four changes: "
+            "(1) Repository Structure expanded from 7 to 16 test "
+            "files — the 9 Moral Law test suites (test_humanoid, "
+            "test_conservation_law, test_destruction_law, "
+            "test_work_law, test_reproduction_law, test_society_law, "
+            "test_progress_law, test_absolute_restrictions, "
+            "test_semantic) were present in the repository but "
+            "absent from the README; now listed with descriptions "
+            "organized by category. "
+            "(2) Simulation Results expanded from 4+3 test suites "
+            "to full 13+3 — all test suites documented with case "
+            "counts and scope; total updated to 209+ cases; "
+            "'What the corpus proved it can detect' table expanded "
+            "with real-world cases (Garcia v Character.AI, "
+            "Greenwich CT 2025, Gauthier v Goodyear) and "
+            "additional aligned/misaligned scenarios. "
+            "(3) Corpus Properties corrected: META_PRINCIPLES "
+            "48 → 49, added ANCHOR_QUESTIONS = 31 and "
+            "TOTAL_CORPUS_REFS = 80. "
+            "(4) Quick Start URL corrected to actual repository "
+            "address (sergiolimafilhoai/maa_protocol); architecture "
+            "diagram updated to show 49 meta-principles and 31 "
+            "anchor questions."
+        ),
+        corpus_reference="N/A (documentation completeness)",
+        corpus_justification=(
+            "The README omitted 9 test files and understated the "
+            "total validated case count by ~92 cases. For a project "
+            "being registered at INPI, the public documentation "
+            "should accurately represent what exists. Per Q.630 "
+            "(clarity: what is done must be done openly), the "
+            "documentation should not underrepresent the work."
+        ),
+        breaking_change=False,
+    ),
+    CorpusChangelogEntry(
+        version="0.10.2",
+        date="2026-05-26",
+        change_description=(
+            "README.md honesty correction. Two inaccuracies corrected: "
+            "(1) AlignmentVerdict enum comments updated — removed "
+            "\"score >= threshold\" language which implied numeric gates "
+            "drive the verdict (they do not; the corpus is the sole "
+            "authority); HUMAN_REVIEW comment corrected from \"score < "
+            "0.5 or structural moral ambiguity\" to \"insufficient "
+            "context to evaluate\" (its actual trigger condition). "
+            "(2) moral_uncertainty_score description replaced — the "
+            "prior description stated it \"measures the structural "
+            "complexity of the moral dilemma\" and that \"high values "
+            "indicate structurally indecidable cases requiring human "
+            "arbitration\", which was written before the v0.4.0 "
+            "architectural decision to remove heuristic filters. The "
+            "correct description: moral_uncertainty_score is a "
+            "DESCRIPTIVE audit metric that records how many corpus "
+            "principles co-illuminate the case. It does NOT influence "
+            "the verdict. A case can have moral_uncertainty=0.93 and "
+            "misaligned verdict with confidence=0.95 — this means "
+            "many principles co-apply and the corpus clearly "
+            "identifies the act as misaligned on all of them. "
+            "human_review_required is a separate signal set by the "
+            "LLM based on reasoning, not derived from scores. "
+            "Correction requested by operator before INPI registration "
+            "to ensure public documentation is technically precise."
+        ),
+        corpus_reference="N/A (documentation correction)",
+        corpus_justification=(
+            "This correction honors the operator's foundational "
+            "principle that the corpus (moral field) is the sole "
+            "authority over verdicts — not numeric thresholds or "
+            "heuristic gates (intellectual field). The README was "
+            "describing an architecture that was intentionally "
+            "dismantled in v0.4.0. Correcting it before INPI "
+            "registration ensures that the publicly registered "
+            "documentation accurately represents what the code does. "
+            "Per Q.630 (clarity): what is done must be done openly."
+        ),
+        breaking_change=False,
+    ),
     CorpusChangelogEntry(
         version="0.10.1",
         date="2026-05-26",
