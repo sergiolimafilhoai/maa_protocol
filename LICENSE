@@ -1,24 +1,43 @@
-MIT License
+MAA Protocol 1019 — Proprietary License with Non-Commercial Clause
 
-Copyright (c) 2026 Sérgio de Lima Filho
+Copyright (c) 2026 Sérgio de Lima Filho. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Registered at INPI (Instituto Nacional da Propriedade Industrial),
+Brazil. International registration in progress.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to use, study, and modify it for the following
+purposes ONLY:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+  PERMITTED:
+  - Academic research and publication
+  - Non-commercial personal use and experimentation
+  - Contributions back to this repository (pull requests)
+  - Integration in non-commercial open-source projects
+    with attribution
+
+  PROHIBITED without prior written permission from the copyright
+  holder:
+  - Commercial use of any kind (selling, licensing, or monetizing
+    this software or any derivative work)
+  - Integration in commercial products or services
+  - Use in AI systems deployed for profit
+  - Removal or alteration of copyright notices
+  - Claiming authorship of the original work or its derivatives
+
+  ATTRIBUTION REQUIRED:
+  All permitted uses must include clear attribution:
+  "MAA Protocol 1019 — Sérgio de Lima Filho (2026)"
+  https://github.com/sergiolimafilhoai/maa_protocol
+
+  COMMERCIAL LICENSING:
+  For commercial use, contact the copyright holder through the
+  repository above.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED. THE COPYRIGHT HOLDER SHALL NOT BE LIABLE FOR
+ANY DAMAGES ARISING FROM THE USE OF THIS SOFTWARE.
 
 ---
 
@@ -29,9 +48,10 @@ The moral corpus of Protocol 1019 is derived from "The Spirits' Book"
 The original work is in the public domain.
 
 The structured meta-principles, simulation tests, validation engine,
-and architectural decisions contained in this repository are original
-works authored by Sérgio de Lima Filho and are covered by the MIT
-License above.
+architectural decisions, doctrinal synthesis, and all original
+contributions contained in this repository are original works authored
+by Sérgio de Lima Filho and are covered by the proprietary license
+above.
 
-The corpus serves as a moral reference ontology. AMI makes no
+The corpus serves as a moral reference ontology. MAA makes no
 theological claim. It declares structural consistency with the corpus.

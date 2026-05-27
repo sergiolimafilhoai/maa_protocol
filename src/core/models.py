@@ -121,7 +121,7 @@ class MoralValidationResult(BaseModel):
 
     # Metadata
     corpus_version: str = "1857.eternal"  # Q.615
-    engine_version: str = "0.10.4"
+    engine_version: str = "0.10.5"
 
 
 # ── Audit trail ─────────────────────────────────────────────────────────────
@@ -159,6 +159,37 @@ class CorpusChangelogEntry(BaseModel):
 
 
 CORPUS_CHANGELOG: list[CorpusChangelogEntry] = [
+    CorpusChangelogEntry(
+        version="0.10.5",
+        date="2026-05-26",
+        change_description=(
+            "LICENSE replaced: MIT → Proprietary License with "
+            "Non-Commercial Clause. MIT license permitted commercial "
+            "use without restriction. New license explicitly permits "
+            "academic research, non-commercial use, and open-source "
+            "contributions with attribution; explicitly prohibits "
+            "commercial use, integration in commercial products or "
+            "AI systems deployed for profit, and removal of copyright "
+            "notices. References INPI registration (Brazil) and "
+            "international registration in progress. CORPUS NOTICE "
+            "preserved and updated to reflect proprietary license "
+            "coverage. Commercial licensing requires prior written "
+            "permission from copyright holder."
+        ),
+        corpus_reference="N/A (legal)",
+        corpus_justification=(
+            "The operator (Sérgio de Lima Filho) registered the "
+            "software at INPI and internationally. The MIT license "
+            "was inconsistent with the intent to control commercial "
+            "use. The proprietary license with non-commercial clause "
+            "protects the work while keeping it accessible for "
+            "research and non-commercial development — consistent "
+            "with the project's mission of building moral "
+            "infrastructure for AI that benefits humanity, not "
+            "primarily commerce."
+        ),
+        breaking_change=False,
+    ),
     CorpusChangelogEntry(
         version="0.10.4",
         date="2026-05-26",
